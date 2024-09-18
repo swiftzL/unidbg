@@ -11,6 +11,7 @@ import com.github.unidbg.linux.android.dvm.VM;
 import com.github.unidbg.memory.Memory;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 
 public class Xvideo extends AbstractJni {
 
@@ -33,9 +34,18 @@ public class Xvideo extends AbstractJni {
         NativeApi = vm.resolveClass("com/weibo/xvideo/NativeApi");
         dm.callJNI_OnLoad(emulator);
     }
+    public String calls(){
+        String arg1 = "aid=01A-khBWIm48A079Pz_DMW6PyZR8uyTumcCNm4e8awxyC2ANU.&cfrom=28B5295010&cuid=5999578300&noncestr=46274W9279Hr1X49A5X058z7ZVz024&platform=ANDROID&timestamp=1621437643609&ua=Xiaomi-MIX2S__oasis__3.5.8__Android__Android10&version=3.5.8&vid=1019013594003&wm=20004_90024";
+        Boolean arg2 = false;
+        String ret = NativeApi.newObject(null).callJniMethodObject(emulator, "s([BZ)Ljava/lang/String;", arg1.getBytes(StandardCharsets.UTF_8), arg2).getValue().toString();
+        return ret;
+    }
+
 
     public static void main(String[] args) {
         Xvideo xvideo = new Xvideo();
+        String result = xvideo.calls();
+        System.out.println("call s result:"+result);
     }
 
 }
