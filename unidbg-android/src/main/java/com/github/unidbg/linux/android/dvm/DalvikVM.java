@@ -3269,11 +3269,11 @@ public class DalvikVM extends BaseVM implements VM {
             }
         });
 
-        Pointer _RegisterNatives = svcMemory.registerSvc(new ArmSvc() {
+        Pointer _RegisterNatives = svcMemory.registerSvc(new ArmSvc() {//env->RegisterNatives(myClass, gMethods, sizeof(gMethods)/sizeof(gMethods[0])) < 0)
             @Override
-            public long handle(Emulator<?> emulator) {
+            public long handle(Emulator<?> emulator) { //registers
                 RegisterContext context = emulator.getContext();
-                UnidbgPointer clazz = context.getPointerArg(1);
+                UnidbgPointer clazz = context.getPointerArg(1);//three args
                 Pointer methods = context.getPointerArg(2);
                 int nMethods = context.getIntArg(3);
                 DvmClass dvmClass = classMap.get(clazz.toIntPeer());

@@ -3356,7 +3356,7 @@ public class DalvikVM64 extends BaseVM implements VM {
 
         Pointer _RegisterNatives = svcMemory.registerSvc(new Arm64Svc() {
             @Override
-            public long handle(Emulator<?> emulator) {
+            public long handle(Emulator<?> emulator) {//env->RegisterNatives(myClass, gMethods, sizeof(gMethods)/sizeof(gMethods[0])) < 0)
                 RegisterContext context = emulator.getContext();
                 UnidbgPointer clazz = context.getPointerArg(1);
                 Pointer methods = context.getPointerArg(2);
@@ -3370,9 +3370,9 @@ public class DalvikVM64 extends BaseVM implements VM {
                 }
                 for (int i = 0; i < nMethods; i++) {
                     Pointer method = methods.share((long) i * emulator.getPointerSize() * 3);
-                    Pointer name = method.getPointer(0);
-                    Pointer signature = method.getPointer(emulator.getPointerSize());
-                    Pointer fnPtr = method.getPointer(emulator.getPointerSize() * 2L);
+                    Pointer name = method.getPointer(0);//name pointer
+                    Pointer signature = method.getPointer(emulator.getPointerSize()); // signature pointer
+                    Pointer fnPtr = method.getPointer(emulator.getPointerSize() * 2L);//function pointer
                     String methodName = name.getString(0);
                     String signatureValue = signature.getString(0);
                     if (log.isDebugEnabled()) {
@@ -3628,11 +3628,11 @@ public class DalvikVM64 extends BaseVM implements VM {
         for (int i = 0; i <= last; i += 8) {
             impl.setLong(i, i);
         }
-        impl.setPointer(0x20, _GetVersion);
+        impl.setPointer(0x20, _GetVersion);//32
         impl.setPointer(0x28, _DefineClass);
         impl.setPointer(0x30, _FindClass);
         impl.setPointer(0x38, _FromReflectedMethod);
-        impl.setPointer(0x40, _FromReflectedField);
+        impl.setPointer(0x40, _FromReflectedField);//16*4 = 64
         impl.setPointer(0x48, _ToReflectedMethod);
         impl.setPointer(0x50, _GetSuperclass);
         impl.setPointer(0x58, _IsAssignableFrom);
